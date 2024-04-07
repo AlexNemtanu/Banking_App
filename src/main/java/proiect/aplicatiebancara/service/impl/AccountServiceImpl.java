@@ -70,4 +70,36 @@ public class AccountServiceImpl implements AccountService {
         return accounts.stream().map((account) -> AccountMapper.mapToAccountDto(account)).collect(Collectors.toList());
 
     }
+
+    @Override
+    public void deleteAccount(Long id) {
+        Account account = accountRepository
+                .findById(id)
+                .orElseThrow(()-> new RuntimeException("Account does not exist"));
+
+        accountRepository.deleteById(id);
+    }
+
+    @Override
+    public void transfer(Long fromId, Long toId, double amount) {
+        Account fromAccount = accountRepository.
+                findById(fromId).
+                orElseThrow(()-> new RuntimeException("The account from which the transfer is made does not exist\n"));
+
+        Account toAccount = accountRepository
+                .findById(toId)
+                .orElseThrow(() -> new RuntimeException("The account in which the transfer will be made does not exist\n"));
+
+        if (fromAccount.getBalance() < amount) {
+            throw new RuntimeException("Insufficient balance in the 'from' account");
+        }
+
+        double fromAccountBalance = fromAccount.getBalance() - amount;
+        fromAccount.setBalance(fromAccountBalance);
+        accountRepository.save(fromAccount);
+
+        double toAccountBalance = toAccount.getBalance() + amount;
+        toAccount.setBalance(toAccountBalance);
+        accountRepository.save(toAccount);
+    }
 }
