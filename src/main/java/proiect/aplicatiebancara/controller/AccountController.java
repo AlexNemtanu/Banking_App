@@ -72,4 +72,5 @@ public class AccountController {
         accountService.transfer(fromAccountId, toAccountId, amount);
         return ResponseEntity.ok("Money transferred successfully");
     }
+
 }
