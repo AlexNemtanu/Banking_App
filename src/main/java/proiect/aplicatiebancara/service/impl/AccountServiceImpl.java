@@ -4,9 +4,11 @@ import org.springframework.stereotype.Service;
 import proiect.aplicatiebancara.dto.AccountDto;
 import proiect.aplicatiebancara.dto.mapper.AccountMapper;
 import proiect.aplicatiebancara.model.Account;
+import proiect.aplicatiebancara.observer.AccountObserver;
 import proiect.aplicatiebancara.repository.AccountRepository;
 import proiect.aplicatiebancara.service.AccountService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,15 +16,19 @@ import java.util.stream.Collectors;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final List<AccountObserver> observers = new ArrayList<>();
+
 
     public AccountServiceImpl(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
+
     }
 
     @Override
     public AccountDto createAccount(AccountDto accountDto) {
         Account account = AccountMapper.mapToAccount(accountDto);
         Account savedAccount = accountRepository.save(account);
+        notifyObservers(account);
         return AccountMapper.mapToAccountDto(savedAccount);
     }
 
@@ -32,6 +38,9 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Account does not exist"));
+        if (account == null) {
+            throw new RuntimeException("Account is null");
+        }
         return AccountMapper.mapToAccountDto(account);
     }
 
@@ -41,6 +50,10 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Account does not exist"));
+
+        if (account == null) {
+            throw new RuntimeException("Account is null");
+        }
 
         double total = account.getBalance() + amount;
         account.setBalance(total);
@@ -53,6 +66,10 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Account does not exist"));
+
+        if (account == null) {
+            throw new RuntimeException("Account is null");
+        }
 
         if (account.getBalance() < amount) {
             throw new RuntimeException("Insufficient amount");
@@ -103,6 +120,22 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(toAccount);
 
     }
+    @Override
+    public void addObserver(AccountObserver observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void notifyObservers(Account account) {
+        for (AccountObserver observer : observers) {
+            observer.update(account);
+        }
+    }
+
+
+
+
+
 
 
 
