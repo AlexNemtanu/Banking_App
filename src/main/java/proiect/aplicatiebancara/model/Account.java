@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
+/**
+ * Entity class representing an account.
+ * This class defines the structure of an account entity, including its ID, account holder name, and balance.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

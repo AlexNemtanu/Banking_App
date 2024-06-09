@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the AccountService interface.
+ * This service class provides methods for managing accounts and notifies observers of account changes.
+ */
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -24,6 +28,11 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+    /**
+     * Creates a new account with the provided account details.
+     * @param accountDto The account details.
+     * @return The created account DTO.
+     */
     @Override
     public AccountDto createAccount(AccountDto accountDto) {
         Account account = AccountMapper.mapToAccount(accountDto);
@@ -32,6 +41,12 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.mapToAccountDto(savedAccount);
     }
 
+    /**
+     * Retrieves an account by its ID.
+     * @param id The ID of the account to retrieve.
+     * @return The account DTO.
+     * @throws RuntimeException If the account does not exist.
+     */
     @Override
     public AccountDto getAccountById(Long id) {
 
@@ -44,6 +59,13 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.mapToAccountDto(account);
     }
 
+    /**
+     * Deposits money into the specified account.
+     * @param id The ID of the account.
+     * @param amount The amount to deposit.
+     * @return The updated account DTO.
+     * @throws RuntimeException If the account does not exist or if the deposit amount is invalid.
+     */
     @Override
     public AccountDto deposit(Long id, double amount) {
 
@@ -61,6 +83,14 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.mapToAccountDto(savedAccount);
     }
 
+    /**
+     * Withdraws money from the specified account.
+     * @param id The ID of the account.
+     * @param amount The amount to withdraw.
+     * @return The updated account DTO.
+     * @throws RuntimeException If the account does not exist, if the withdrawal amount is invalid,
+     *                          or if there are insufficient funds in the account.
+     */
     @Override
     public AccountDto withdraw(Long id, double amount) {
         Account account = accountRepository
@@ -81,6 +111,10 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.mapToAccountDto(savedAccount);
     }
 
+    /**
+     * Retrieves all accounts.
+     * @return A list of account DTOs.
+     */
     @Override
     public List<AccountDto> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
@@ -88,6 +122,11 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+    /**
+     * Deletes an account by its ID.
+     * @param id The ID of the account to delete.
+     * @throws RuntimeException If the account does not exist.
+     */
     @Override
     public void deleteAccount(Long id) {
         Account account = accountRepository
@@ -97,6 +136,13 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.deleteById(id);
     }
 
+    /**
+     * Transfers money from one account to another.
+     * @param fromId The ID of the account to transfer money from.
+     * @param toId The ID of the account to transfer money to.
+     * @param amount The amount to transfer.
+     * @throws RuntimeException If either account does not exist or if the transfer amount is invalid.
+     */
     @Override
     public void transfer(Long fromId, Long toId, double amount) {
         Account fromAccount = accountRepository.
