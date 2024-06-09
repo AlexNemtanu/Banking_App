@@ -19,8 +19,8 @@ Completează formularul de înregistrare cu numele complet, username-ul și paro
 După înregistrare, se apasa pe butonul de login here care va va redirectiona pe formularul de autentificare.
 Completeaza formularul cu username-ul si parola ce au fost folosite pentru inregistrare.
 După autentificare, vei fi redirecționat către pagina de home unde se pot efectua următoarele secțiuni:
--Vizualizare sold
--Depunere bani
--Retragere bani
--Actualizare cont
--Ștergere cont
+- Vizualizare sold
+- Depunere bani
+- Retragere bani
+- Actualizare cont
+- Ștergere cont
