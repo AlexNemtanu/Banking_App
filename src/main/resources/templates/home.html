@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #5e057e;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            color: #5e057e;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        button[type="submit"] {
+            background-color: #5e057e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        button[type="submit"]:hover {
+            background-color: #c299d0;
+        }
+        .account-section {
+            margin-top: 20px;
+        }
+        .account-section h3 {
+            color: #5e057e;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .account-details, .account-actions {
+            margin-bottom: 20px;
+        }
+        .logout-button {
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Welcome, <span th:text="${userdetail.fullname}"></span></h2>
+    <div class="logout-button">
+        <a href="/logout" style="color: #5e057e; font-weight: bold;">Logout</a>
+    </div>
+    <h3>Your Account</h3>
+
+        <div class="account-details">
+            <p><strong>Account Holder:</strong> <span th:text="${userdetail.fullname}"></span></p>
+            <!-- <p><strong>Balance:</strong> $<span th:text="${account.balance}"></span></p>-->
+        </div>
+        <div class="account-actions">
+            <form th:action="@{/deposit}" method="post">
+                <div class="form-group">
+                    <label for="deposit">Deposit Amount</label>
+                    <input type="text" id="deposit" name="amount" required>
+                </div>
+                <button type="submit">Deposit</button>
+            </form>
+            <form th:action="@{/withdraw}" method="post">
+                <div class="form-group">
+                    <label for="withdraw">Withdraw Amount</label>
+                    <input type="text" id="withdraw" name="amount" required>
+                </div>
+                <button type="submit">Withdraw</button>
+            </form>
+        </div>
+
+    <h3>Account Actions</h3>
+    <div class="account-section">
+        <form th:action="@{/updateAccount}" method="post">
+            <div class="form-group">
+                <label for="fullname">Fullname</label>
+                <input type="text" id="fullname" name="fullname" th:value="${userdetail.fullname}" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Update Account</button>
+        </form>
+        <form th:action="@{/deleteAccount}" method="post">
+            <button type="submit" style="background-color: red;">Delete Account</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

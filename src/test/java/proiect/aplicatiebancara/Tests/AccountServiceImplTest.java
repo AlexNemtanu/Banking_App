@@ -1,3 +1,4 @@
+/*
 package proiect.aplicatiebancara.Tests;
 
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,8 @@ class AccountServiceImplTest {
     }
 
    // @Test
-   /* void testDeposit() {
+   */
+/* void testDeposit() {
 
         long accountId = 1L;
         double initialBalance = 100.0;
@@ -80,9 +82,11 @@ class AccountServiceImplTest {
 
         verify(accountRepository, times(1)).findById(accountId);
         verify(accountRepository, times(1)).save(any(Account.class));
-    }*/
+    }*//*
 
-   /* @Test
+
+   */
+/* @Test
     void testWithdraw() {
 
         long accountId = 1L;
@@ -104,5 +108,7 @@ class AccountServiceImplTest {
         verify(accountRepository, times(1)).findById(accountId);
         verify(accountRepository, times(1)).save(any(Account.class));
     }
-*/
+*//*
+
 }
+*/

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            width: 400px;
+        }
+        h2{
+            text-align: center;
+            color: #5e057e;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            color: #5e057e;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        button[type = "submit"] {
+            background-color: #5e057e;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        button[type ="submit"]:hover{
+            background-color: #c299d0;
+        }
+        .error-message{
+            background-color: #5e057e;
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+        }
+        .logout-message{
+            background-color: #5e057e;
+            color: #fff;
+            padding: 10px;
+            border-radius: 3px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class = "form-container">
+        <div th:if="${param.error}">
+            <div class = "error-message">
+                <p>Invalid username or password</p>
+            </div>
+        </div>
+        <div th:if="${param.logout}">
+            <div class = "logout-message">
+                <p>You've been logged out</p>
+            </div>
+        </div>
+        <h2>Login</h2>
+        <form
+                method="post"
+                role = "form"
+                th:action="@{/login}"
+                th:object="${user}"
+        >
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input th:field="*{username}" type="text" id="username" name="username" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input th:field="*{password}" type="password" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit">Login</button>
+        </form>
+        <span> Register here: <a th:href="@{/register}">Register</a></span>
+    </div>
+</div>
+</body>
+</html>

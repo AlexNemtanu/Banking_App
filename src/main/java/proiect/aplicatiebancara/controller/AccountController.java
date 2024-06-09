@@ -1,11 +1,18 @@
 package proiect.aplicatiebancara.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import proiect.aplicatiebancara.dto.AccountDto;
+import proiect.aplicatiebancara.model.User;
 import proiect.aplicatiebancara.service.AccountService;
+import proiect.aplicatiebancara.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
@@ -14,11 +21,13 @@ import java.util.Map;
  * This class defines endpoints for performing operations such as adding, retrieving,
  * depositing, withdrawing, transferring, and deleting accounts.
  */
-@RestController
+@Controller
 @RequestMapping("/api/accounts")
 public class AccountController {
 
     private final AccountService accountService;
+    @Autowired
+    private UserService userService;
 
     /**
      * Constructs a new AccountController with the specified AccountService.
@@ -55,11 +64,18 @@ public class AccountController {
      * @param request A Map containing the amount to deposit.
      * @return ResponseEntity containing the updated AccountDto and HTTP status code.
      */
-    @PutMapping("/{id}/deposit")
+    /*@PutMapping("/{id}/deposit")
     public  ResponseEntity<AccountDto> deposit(@PathVariable Long id, @RequestBody Map<String, Double> request){
         Double amount = request.get("amount");
         AccountDto accountDto = accountService.deposit(id, amount);
         return ResponseEntity.ok(accountDto);
+    }*/
+    @PostMapping("/deposit")
+    public String deposit(@RequestParam double amount, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        accountService.deposit(user.getId(), amount);
+        return "redirect:/home";
     }
 
     /**
@@ -68,11 +84,22 @@ public class AccountController {
      * @param request A Map containing the amount to withdraw.
      * @return ResponseEntity containing the updated AccountDto and HTTP status code.
      */
-    @PutMapping("/{id}/withdraw")
+    /*@PutMapping("/{id}/withdraw")
     public ResponseEntity<AccountDto> withdraw(@PathVariable Long id, @RequestBody Map<String, Double> request){
         double amount = request.get("amount");
         AccountDto accountDto = accountService.withdraw(id, amount);
         return ResponseEntity.ok(accountDto);
+    }*/
+    @PostMapping("/withdraw")
+    public String withdraw(@RequestParam double amount, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        try {
+            accountService.withdraw(user.getId(), amount);
+        } catch (IllegalArgumentException e) {
+            // gestionează eroarea, poate afișează un mesaj de eroare
+        }
+        return "redirect:/home";
     }
 
     /**
@@ -90,10 +117,18 @@ public class AccountController {
      * @param id The ID of the account to delete.
      * @return ResponseEntity containing a success message and HTTP status code.
      */
-    @DeleteMapping("/{id}")
+    /*@DeleteMapping("/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id){
         accountService.deleteAccount(id);
         return ResponseEntity.ok("Account was deleted");
+    }*/
+    @PostMapping("/deleteAccount")
+    public String deleteAccount(Principal principal) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        accountService.deleteAccount(user.getId());
+        userService.deleteUser(username);
+        return "redirect:/login?logout";
     }
 
     /**
@@ -110,6 +145,18 @@ public class AccountController {
         accountService.transfer(fromAccountId, toAccountId, amount);
         return ResponseEntity.ok("Money transferred successfully");
     }
+
+    /*@PostMapping("/updateAccount")
+    public String updateAccount(@RequestParam String fullname, @RequestParam String password, Principal principal) {
+        String username = principal.getName();
+        User user = userService.findByUsername(username);
+        user.setFullname(fullname);
+        if (!password.isEmpty()) {
+            user.setPassword(new BCryptPasswordEncoder().encode(password));
+        }
+        userService.save(user);
+        return "redirect:/home";
+    }*/
 
 }
 

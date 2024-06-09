@@ -2,6 +2,7 @@ package proiect.aplicatiebancara.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import proiect.aplicatiebancara.model.User;
 
 /**
  * Data Transfer Object (DTO) class representing an account.
@@ -24,4 +25,8 @@ public class AccountDto {
      * The balance of the account.
      */
     private double balance;
+    private User user;
+
+    public AccountDto() {
+    }
 }

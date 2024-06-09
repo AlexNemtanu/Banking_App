@@ -1,7 +1,6 @@
 package proiect.aplicatiebancara.service.impl;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import proiect.aplicatiebancara.dto.UserDto;
@@ -9,17 +8,17 @@ import proiect.aplicatiebancara.model.User;
 import proiect.aplicatiebancara.repository.UserRepository;
 import proiect.aplicatiebancara.service.UserService;
 
-import static org.springframework.security.core.userdetails.User.withUsername;
-
 @Service
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+        // this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -29,20 +28,28 @@ public class UserServiceImpl implements UserService {
         }
         User user = new User();
         user.setUsername(userDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        user.setRole("ROLE_USER");
+        user.setPassword( passwordEncoder.encode(userDto.getPassword()));
+        //user.setPassword(userDto.getPassword());
+        user.setFullname(userDto.getFullname());
         return userRepository.save(user);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
-        return withUsername(user.getUsername())
-                .password(user.getPassword())
-                .roles(user.getRole())
-                .build();
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
+
+
+    /*public void updateAccount(User user, String fullname, String password) {
+        user.setFullname(fullname);
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }*/
+    @Override
+    public void deleteUser(String username) {
+        User user = findByUsername(username);
+        userRepository.delete(user);
+
+    }
+
 }

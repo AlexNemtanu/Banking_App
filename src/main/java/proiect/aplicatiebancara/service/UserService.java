@@ -1,9 +1,11 @@
 package proiect.aplicatiebancara.service;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
-import proiect.aplicatiebancara.model.User;
 import proiect.aplicatiebancara.dto.UserDto;
+import proiect.aplicatiebancara.model.User;
 
-public interface UserService extends UserDetailsService {
+public interface UserService {
     User save(UserDto userDto);
+    User findByUsername(String username);
+   /* User updateAccount(UserDto userDto, String fullname, String password);*/
+    void deleteUser(String username);
 }

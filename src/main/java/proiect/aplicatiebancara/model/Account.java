@@ -25,5 +25,16 @@ public class Account {
     private String accountHolderName;
     private double balance;
 
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public User getUser() {
+        return user;
+    }
 
 }
