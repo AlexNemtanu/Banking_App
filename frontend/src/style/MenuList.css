@@ -1,0 +1,28 @@
+.menu-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  .menu-item {
+    padding: 10px;
+    background-color: #5e057e;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    width: 120px;
+  }
+  
+  .menu-item:hover {
+    background-color: #fff;
+    color: #5e057e;
+  }
+  
+  .selectedMenu {
+    background-color: #fff;
+    color: #5e057e;
+  }
+
+  
+  
